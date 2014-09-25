@@ -109,6 +109,12 @@ class gsVarDump
 				$result = 
 					$this->_useHtmlCode(gettype($vardump), "array", $htmlcode, "&nbsp;") . 
 					$this->_useHtmlCode("(size={$size})", "size", $htmlcode, "<br>");
+					
+				// if array is empty
+				if ($size===0) {
+					if ($htmlcode) $result .= str_repeat(self::WHITE_SPACE, $level);
+					$result .= $this->_useHtmlCode("empty", "empty", $htmlcode, "<br>");
+				}
 				
 				// loop all the array datas
 				foreach ($vardump as $key => $val) {
@@ -169,7 +175,13 @@ class gsVarDump
 					$this->_useHtmlCode(gettype($vardump), "object", $htmlcode) . "(" .
 					$this->_useHtmlCode(get_class($vardump), "objname", $htmlcode) . ")[" .
 					$this->_useHtmlCode($sizeobj, "size class", $htmlcode) . "]";
-				if ($htmlcode) $result .= "<br>";
+				if ($htmlcode) $result .= "<br>";				
+
+				// if object is empty
+				if ($sizeobj===0) {
+					if ($htmlcode) $result .= str_repeat(self::WHITE_SPACE, $level);
+					$result .= $this->_useHtmlCode("empty", "empty", $htmlcode, "<br>");
+				}
 				
 				// get class name
 				$classname = get_class($vardump);
@@ -321,6 +333,9 @@ class gsVarDump
 						break;
 					case 'string':
 						$css .= 'color:#cc0000;';
+						break;
+					case 'empty':
+						$css .= 'color:#888a85; font-style:italic;';
 						break;
 					case 'visibility':
 					case 'size':
