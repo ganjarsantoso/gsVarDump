@@ -1,7 +1,7 @@
 gsVarDump
 =========
 
-__*gsVarDump: a pure PHP `var_dump()` replacement for unlimited levels deep*__
+__*gsVarDump: a pure PHP class for `var_dump()` alternatives with editable beautified css and unlimited levels deep*__
 
 Using *gsVarDump* is easy, just download the module and place it along with your php file(s). Inside the php file, you have to include the module as example below.
 
