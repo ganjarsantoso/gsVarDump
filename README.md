@@ -28,9 +28,7 @@ $string = $dump->vardump($vardump [,$limit [,$use_htmlcode]]);
 echo $string;
 ```
 
-Unlike directly call `gs_vardump()` function, in this way you can store the result to a variable because the return of `vardump()` is a string. The properties are the same as `gs_vardump()` except for the `$skin`, this way, you define a theme in different method.
-
-Of course, you can make the return value of the `$dump->vardump()` function is pure string that contain variable strucure without messed up with html code. To do this, set the `$use_htmlcode` value to `false`. 
+Unlike directly call `gs_vardump()` function, in this way you can store the result to a variable because the return of `vardump()` is a string. Of course, you can make the return value of the `$dump->vardump()` function is pure string that contain variable strucure without messed up with html code. To do this, set the `$use_htmlcode` value to `false`. The properties are the same as `gs_vardump()` except for the `$skin` theme, this way you define a skin theme in different method.
 
 
 **Set themes on gsVarDump**
@@ -40,6 +38,7 @@ Of course, you can make the return value of the `$dump->vardump()` function is p
 ```
 $dump = new gsVarDump('themes/default.css')
 ```
+
 
 At the example, css default theme is in the folder themes. Of course, you can modify the default css to match it with your own style, or create a new theme based on default css theme. Default css theme is included in the download package.
 
@@ -51,5 +50,6 @@ $dump = new gsVarDump();
 //this is somewhere on html head
 $dump->useSkin('themes/default.css');
 ```
+
 
 If you don't wanna messed up with themes, and make this module independent without needed any external css sources, you have to take a look at the *gsVarDump* code module and change value of a constant `IN_LINE_CSS_STYLE` to `true` (default is `false`). If you set it to `true`, any themes setting will be ignored and default built in css which in line with html code span/div will be used.
