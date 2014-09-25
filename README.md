@@ -1,9 +1,9 @@
 gsVarDump
 =========
 
-*gsVarDump: a pure PHP `var_dump()` replacement for unlimited levels deep*
+__*gsVarDump: a pure PHP `var_dump()` replacement for unlimited levels deep*__
 
-Using gsVarDump is easy, just download the module and place it along with your php file(s). Inside the php file, you have to include the module as example below.
+Using *gsVarDump* is easy, just download the module and place it along with your php file(s). Inside the php file, you have to include the module as example below.
 
 ```
 require_once('gs.vardump.php');
@@ -15,7 +15,7 @@ After you initiate the module, you can directly dump a variable. To dump a varia
 gs_vardump($vardump [,$limit [,$use_htmlcode]])
 ```
 
-Note: like php `var_dump()`, if you call gs_vardump function it will directly show the result. You can't store the result to a new variable. If you want to store the result, use OOP-style instead.
+Note: like php `var_dump()`, if you call `gs_vardump()` function it will directly show the result. You can't store the result to a new variable. If you want to store the result, use OOP-style instead.
 
 There are four properties on `gs_vardump()`. The first is `$vardump` which is the variable you want to dump, Second is `$limit` (optional) is the limit of level you want to display, default is 0 which mean unlimited, or set it to 3 to exactly match the php `var_dump()` (three levels deep). And the secound last is `$use_htmlcode` (optional) use if you want to display the result with html-design, the default is true. If you set it to false, the return value is just plain variable without html code. And the last is `$skin` (optional) which refer to css theme to re-design the dump structure to make nicer look.
 
@@ -28,11 +28,11 @@ $string = $dump->vardump($vardump [,$limit [,$use_htmlcode]]);
 echo $string;
 ```
 
-Unlike directly call `gs_vardump()` function, in this way you can store the result to a variable because the return of `vardump()` is a string. The properties are the same as `gs_vardump()` except for the `$skin`. In this way, you can define a theme in different way.
+Unlike directly call `gs_vardump()` function, in this way you can store the result to a variable because the return of `vardump()` is a string. The properties are the same as `gs_vardump()` except for the `$skin`, this way, you define a theme in different method.
 
 **Set themes on gsVarDump**
 
-gsVarDump has theme. If you want the style exactly look like the php `var_dump()` output, you can use default theme. To use it, refer $skin to where default css theme located. See example below.
+*gsVarDump* has theme. If you want the style exactly look like the php `var_dump()` output, you can use default theme. To use it, refer `$skin` to where default css theme located. See example below.
 
 ```
 $dump = new gsVarDump('themes/default.css')
