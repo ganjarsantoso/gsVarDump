@@ -1,7 +1,7 @@
 <?php
 
 /**
- * gsVarDump: a pure PHP var_dump() replacement for unlimited levels deep
+ * gsVarDump: a pure PHP class for var_dump() alternatives with editable beautified css and unlimited levels deep
  * @author Ganjar Santoso (2014)
  * @link http://www.twitter.com/ganjarsantoso
  * @link https://github.com/ganjarsantoso/gsVarDump
