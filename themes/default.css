@@ -1,0 +1,51 @@
+@charset "utf-8";
+/* CSS Document */
+
+.gs-var-dump {
+	font-family:monospace, Consolas, "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", Monaco, "Courier New";
+	white-space:nowrap;
+	font-size:small;
+	padding:1em 0;
+}
+
+.type {
+	font-size:smaller;
+}
+
+.array, .object, .limit {
+	font-weight:bold;
+}
+
+.null, .resource {
+	color:#3465a4;
+}
+
+.value {}
+
+.boolean {
+	color:#75507b;
+}
+
+.integer {
+	color:#4e9a06;
+}
+
+.double {
+	color:#f57900;
+}
+
+.string {
+	color:#cc0000;
+}
+
+.arraykey {}
+
+.resource {}
+
+.unknown {}
+
+.separator {}
+
+.visibility, .size, .objname {
+	font-style:italic;
+}
