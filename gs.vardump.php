@@ -24,17 +24,23 @@ class gsVarDump
 	 */
 	const SEPARATOR = '=>';
 	/**
-	 * @const string LIMIT : when reaching limit level deep (if set)
+	 * @const string LIMIT : symbol when reaching limit level deep (if set)
 	 */
 	const LIMIT = '...';
+	/**
+	 * @const boolean IN_LINE_CSS_STYLE
+	 * set false to use external css file (themes mode activated)
+	 * set true to force the css in line with span/div tags using built in internal default css style
+	 *   in this mode you dont need any external css (themes mode deactivated)
+	 */
+	const IN_LINE_CSS_STYLE = false;
 	
 	/**
-     * the function "__construct()" automatically starts whenever an object of this class is created,
-     * you know, when you do "$dump = new gsVarDump();"
+     * Load all the initial class variable
      */
 	public function __construct($skin=null)
 	{
-		// check if the skin is used
+		// check if the skin is used 
 		if (!empty($skin)) {
 			// set the skin
 			$this->useSkin($skin);
@@ -47,7 +53,7 @@ class gsVarDump
 	public function vardump($vardump, $limit=0, $htmlcode=true)
 	{
 		$this->dumped = '';
-		return "<div class=\"gs-var-dump\">".$this->_dump($vardump, $limit, $htmlcode)."</div>";
+		return $this->_useHtmlCode($this->_dump($vardump, $limit, $htmlcode), "gs-var-dump", $htmlcode, "", "div");
 	}
 		
 	/**
@@ -89,6 +95,7 @@ class gsVarDump
 				
 			// in case data type is STRING
 			case 'STRING'		:
+				$vardump = "'{$vardump}'";
 				$result = 
 					$this->_useHtmlCode(gettype($vardump), "type", $htmlcode, "&nbsp;") . 
 					$this->_useHtmlCode($vardump, "value string", $htmlcode, "&nbsp;") .
@@ -120,7 +127,7 @@ class gsVarDump
 					
 					// set the result
 					$result .= 
-						$this->_useHtmlCode(gettype($keyx), "value arraykey", $htmlcode, "&nbsp;") . 
+						$this->_useHtmlCode($keyx, "value arraykey", $htmlcode, "&nbsp;") . 
 						$this->_useHtmlCode(self::SEPARATOR, "separator", $htmlcode);
 						
 					// create white space to make nice look
@@ -141,12 +148,13 @@ class gsVarDump
 					$level--;
 				}
 				/*
+				// use this if you want to separated in level only
 				foreach ($vardump as $key => $val) {
 					if (is_int($key)) $keyx = $key; else $keyx = "'{$key}'";
 					if ($htmlcode) $result .= str_repeat(WHITE_SPACE, $level);
 					$result .= 
-						$this->_useHtmlCode(gettype($keyx), "value arraykey", $htmlcode, "&nbsp;") . 
-						$this->_useHtmlCode(SEPARATOR, "separator", $htmlcode, "&nbsp;");
+						$this->_useHtmlCode($keyx, "value arraykey", $htmlcode, "&nbsp;") . 
+						$this->_useHtmlCode(self::SEPARATOR, "separator", $htmlcode, "&nbsp;");
 					$result .= $this->_dump($val, $limit, $htmlcode, ++$level, ++$onlevel);
 					$level--;
 				}
@@ -222,7 +230,7 @@ class gsVarDump
 					$this->_useHtmlCode(strtolower(gettype($vardump)), "null", $htmlcode, "<br>");
 				break;
 				
-			// in case data is RESOURCES
+			// in case data is RESOURCE
 			case 'RESOURCE'		:
 				$result = 
 					$this->_useHtmlCode(gettype($vardump), "type", $htmlcode, "&nbsp;");
@@ -243,13 +251,13 @@ class gsVarDump
 	}
 	
 	/**
-	 * Generate html-styled in every output in span
+	 * Generate html-styled output span/div
 	 */
-	private function _useHtmlCode($display_item, $css_class='', $use_html=true, $html_add='')
+	private function _useHtmlCode($display_item, $css_class='', $use_html=true, $html_add='', $tags='span')
 	{
 		if ($use_html) {
-			if (!empty($css_class)) $css_class = "class=\"{$css_class}\"";
-			$result = "<span ".$css_class.">".$display_item."</span>".$html_add;
+			if (!empty($css_class)) $css_class = $this->cssStyle($css_class, self::IN_LINE_CSS_STYLE);
+			$result = "<".$tags." ".$css_class.">".$display_item."</".$tags.">".$html_add;
 		} else {
 			$result = $display_item;
 		}
@@ -257,21 +265,84 @@ class gsVarDump
 	}
 	
 	/**
-	 * Generate css-themes
+	 * Generate css-link
 	 */
 	public function useSkin($skinPath)
 	{
-		echo '<link rel="stylesheet" type="text/css" href="'.$skinPath.'">';
-		/*
-		$handle = fopen($skinPath, 'r');
-		$read = fread($handle, filesize($skinPath));
-		fclose($handle);
-		echo '<style type="text/css">'.$read.'</style>';
-		*/
+		if (self::IN_LINE_CSS_STYLE==false) {
+			echo '<link rel="stylesheet" type="text/css" href="'.$skinPath.'">';
+			/*
+			// use this if you want to load css file without link, place it between html head tag
+			$handle = fopen($skinPath, 'r');
+			$read = fread($handle, filesize($skinPath));
+			fclose($handle);
+			echo '<style type="text/css">'.$read.'</style>';
+			*/
+		}
+	}
+	
+	/**
+	 * Generate css-themes
+	 * in line css used if IN_LIE_CSS_STYLE set to true
+	 * otherwise css external theme used
+	 */
+	private function cssStyle($css_class, $in_line_mode=false)
+	{
+		if ($in_line_mode) {
+			$css = '';
+			$css_class = strtolower(trim($css_class));
+			$cssClasses = explode(' ', $css_class);
+			foreach ($cssClasses as $cssClass) {
+				$cssClass = trim($cssClass);
+				switch($cssClass) {
+					case 'gs-var-dump':
+						$css .= "font-family:monospace, Consolas, Monaco, 'Courier New'; white-space:nowrap; font-size:small; padding:1em 0;";
+						break;
+					case 'type':
+						$css .= 'font-size:smaller;';
+						break;
+					case 'array':
+					case 'object':
+					case 'limit':
+						$css .= 'font-weight:bold;';
+						break;
+					case 'null':
+					case 'resource':
+						$css .= 'color:#3465a4;';
+						break;
+					case 'boolean':
+						$css .= 'color:#75507b;';
+						break;
+					case 'integer':
+						$css .= 'color:#4e9a06;';
+						break;
+					case 'double':
+						$css .= 'color:#f57900;';
+						break;
+					case 'string':
+						$css .= 'color:#cc0000;';
+						break;
+					case 'visibility':
+					case 'size':
+					case 'objname':
+						$css .= 'font-style:italic;';
+						break;
+					case 'value':
+					case 'arraykey':
+					case 'unknown':
+					case 'separator':
+					default: break;
+				}
+			}
+			$css = 'style="'.$css.'"';
+		} else {
+			$css = 'class="'.$css_class.'"';
+		}
+		return $css;
 	}
 }
 
-// Direct function to gsVarDump
+// Direct function call to gsVarDump
 function gs_vardump($vardump, $limit=0, $use_htmlcode=true, $skin=false)
 {
 	$dump = new gsVarDump($skin);
