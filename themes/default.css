@@ -38,9 +38,12 @@
 	color:#cc0000;
 }
 
-.arraykey {}
+.empty {
+	color:#888a85;
+	font-style:italic;
+}
 
-.resource {}
+.arraykey {}
 
 .unknown {}
 
