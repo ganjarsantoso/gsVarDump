@@ -30,6 +30,9 @@ echo $string;
 
 Unlike directly call `gs_vardump()` function, in this way you can store the result to a variable because the return of `vardump()` is a string. The properties are the same as `gs_vardump()` except for the `$skin`, this way, you define a theme in different method.
 
+Of course, you can make the return value of the `$dump->vardump()` function is pure string that contain variable strucure without messed up with html code. To do this, set the `$use_htmlcode` value to `false`. 
+
+
 **Set themes on gsVarDump**
 
 *gsVarDump* has theme. If you want the style exactly look like the php `var_dump()` output, you can use default theme. To use it, refer `$skin` to where default css theme located. See example below.
@@ -49,3 +52,5 @@ $dump = new gsVarDump();
 
 $dump->useSkin('themes/default.css');
 ```
+
+If you don't wanna messed up with themes, and make this module independent without needed any external css sources, you have to take a look at the *gsVarDump* code module and change value of a constant `IN_LINE_CSS_STYLE` to `true` (default is `false`). If you set it to `true`, any themes setting will be ignored and default built in css which in line with html code span/div will be used.
