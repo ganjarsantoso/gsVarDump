@@ -37,4 +37,5 @@ If you directly set theme when creating the object, it will force the html css l
 $dump = new gsVarDump();
 
 //this is somewhere on html head
+
 $dump->useSkin('themes/default.css');
