@@ -3,23 +3,31 @@ gsVarDump
 
 __*gsVarDump:*__ a pure PHP class for `var_dump()` alternatives with editable beautified css and unlimited levels deep
 
-Using *gsVarDump* is easy, just download the module and place it along with your php file(s). Inside the php file, you have to include the module as example below.
+To use **gsVarDump**, download the module and place it along with your php file(s). Inside the php file, you have to include the module as example below.
 
 ```
 require_once('gs.vardump.php');
 ```
 
-After you initiate the module, you can directly dump a variable. To dump a variable, there are two ways to do it. The simplest way to do this is just call the `gs_vardump()` function. See below.
+After you initiate the module, you can directly dump a variable. To dump a variable, there are two ways to do it. First, call it directly using function and second is using OOP-style.
+
+**- Call gsVarDump directly with `gs_vardump()`**
 
 ```
-gs_vardump($vardump [,$limit [,$use_htmlcode]])
+gs_vardump($vardump [,$limit [,$use_htmlcode [,$skin]]])
 ```
 
 Note: like php `var_dump()`, if you call `gs_vardump()` function it will directly show the result. You can't store the result to a new variable. If you want to store the result, use OOP-style instead.
 
-There are four properties on `gs_vardump()`. The first is `$vardump` which is the variable you want to dump, Second is `$limit` (optional) is the limit of level you want to display, default is 0 which mean unlimited, or set it to 3 to exactly match the php `var_dump()` (three levels deep). And the secound last is `$use_htmlcode` (optional) use if you want to display the result with html-design, the default is true. If you set it to false, the return value is just plain variable without html code. And the last is `$skin` (optional) which refer to css theme to re-design the dump structure to make nicer look.
+In this way, you don't need to create an object, the function will do it for you.
 
-The other way to dump a variable is use OOP-style. First, create new gsVarDump object. See below.
+There are four properties on `gs_vardump()`.
+1. `$vardump` : the variable you want to dump.
+2. `$limit` (optional) : how much levels deep you want to display, default is 0 which mean unlimited.
+3. `$use_htmlcode` (optional) : use if you want to display the result with html-design, the default is `true`. If you set it to `false`, the return value is just plain variable without html code.
+4. `$skin` (optional) : which refer to css theme to beautify the dump structure to make it nicer look.
+
+**Dump a variable using OOP-style by creating new gsVarDump object.**
 
 ```
 $dump = new gsVarDump($skin);
@@ -28,12 +36,12 @@ $string = $dump->vardump($vardump [,$limit [,$use_htmlcode]]);
 echo $string;
 ```
 
-Unlike directly call `gs_vardump()` function, in this way you can store the result to a variable because the return of `vardump()` is a string. Of course, you can make the return value of the `$dump->vardump()` function is pure string that contain variable strucure without messed up with html code. To do this, set the `$use_htmlcode` value to `false`. The properties are the same as `gs_vardump()` except for the `$skin` theme, this way you define a skin theme in different method.
+Unlike directly calling `gs_vardump()` function, this way you can store the result to a variable because the return of `$dump->vardump()` is a string (html code included). To omit the html code of returned value, set the `$use_htmlcode` value to `false`. The properties are the same as `gs_vardump()` except for the `$skin` theme, this way you define a skin theme in different method.
 
 
-**Set themes on gsVarDump**
+**- Set themes on gsVarDump**
 
-*gsVarDump* has theme. If you want the style exactly look like the php `var_dump()` output, you can use default theme. To use it, refer `$skin` to where default css theme located. See example below.
+*gsVarDump* has theme. If you want the style exactly look like the php `var_dump()` with xdebug-installed output, you can use default theme. To use it, refer `$skin` to where default css theme located.
 
 ```
 $dump = new gsVarDump('themes/default.css')
@@ -52,4 +60,4 @@ $dump->useSkin('themes/default.css');
 ```
 
 
-If you don't wanna messed up with themes, and make this module independent without needed any external css sources, you have to take a look at the *gsVarDump* code module and change value of a constant `IN_LINE_CSS_STYLE` to `true` (default is `false`). If you set it to `true`, any themes setting will be ignored and default built in css which in line with html code span/div will be used.
+If you don't wanna messed up with themes, and make this module independent without needed any external css sources, you have to take a look at the *gsVarDump* code module and change value of a constant `IN_LINE_CSS_STYLE` to `true` (default is `false`). If you set it to `true`, any themes setting will be ignored and default built in css which is in line with html code span/div will be used.
