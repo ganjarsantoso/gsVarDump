@@ -11,7 +11,7 @@ require_once('gs.vardump.php');
 
 After you initiate the module, you can directly dump a variable. To dump a variable, there are two ways to do it. First, call it directly using function and second is using OOP-style.
 
-**- Call gsVarDump directly with `gs_vardump()`**
+**Call gsVarDump directly with `gs_vardump()`**
 
 ```
 gs_vardump($vardump [,$limit [,$use_htmlcode [,$skin]]])
@@ -39,7 +39,7 @@ echo $string;
 Unlike directly calling `gs_vardump()` function, this way you can store the result to a variable because the return of `$dump->vardump()` is a string (html code included). To omit the html code of returned value, set the `$use_htmlcode` value to `false`. The properties are the same as `gs_vardump()` except for the `$skin` theme, this way you define a skin theme in different method.
 
 
-**- Set themes on gsVarDump**
+**Set themes on gsVarDump**
 
 *gsVarDump* has theme. If you want the style exactly look like the php `var_dump()` with xdebug-installed output, you can use default theme. To use it, refer `$skin` to where default css theme located.
 
