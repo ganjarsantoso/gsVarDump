@@ -89,16 +89,15 @@ class gsVarDump
 				// in case in the future float and double are different in php
 				if (is_float($vardump)) $dtype = 'float'; else $dtype = gettype($vardump);
 				$result = 
-					$this->_useHtmlCode(gettype($vardump), "type", $htmlcode, "&nbsp;") . 
+					$this->_useHtmlCode($dtype, "type", $htmlcode, "&nbsp;") . 
 					$this->_useHtmlCode($vardump, "value double", $htmlcode, "<br>");
 				break;
 				
 			// in case data type is STRING
 			case 'STRING'		:
-				$vardump = "'{$vardump}'";
 				$result = 
 					$this->_useHtmlCode(gettype($vardump), "type", $htmlcode, "&nbsp;") . 
-					$this->_useHtmlCode($vardump, "value string", $htmlcode, "&nbsp;") .
+					$this->_useHtmlCode("'{$vardump}'", "value string", $htmlcode, "&nbsp;") .
 					$this->_useHtmlCode("(length=".mb_strlen($vardump).")", "size", $htmlcode, "<br>");
 				break;
 				
@@ -170,19 +169,13 @@ class gsVarDump
 			// in case data type is OBJECT
 			case 'OBJECT'		:
 				// get size of object
-				$sizeobj = count((array)$vardump)-1;
+				$sizeobj = count((array)$vardump);
 				$result = 
 					$this->_useHtmlCode(gettype($vardump), "object", $htmlcode) . "(" .
 					$this->_useHtmlCode(get_class($vardump), "objname", $htmlcode) . ")[" .
 					$this->_useHtmlCode($sizeobj, "size class", $htmlcode) . "]";
 				if ($htmlcode) $result .= "<br>";				
 
-				// if object is empty
-				if ($sizeobj===0) {
-					if ($htmlcode) $result .= str_repeat(self::WHITE_SPACE, $level);
-					$result .= $this->_useHtmlCode("empty", "empty", $htmlcode, "<br>");
-				}
-				
 				// get class name
 				$classname = get_class($vardump);
 				// loop all the object datas
@@ -245,15 +238,16 @@ class gsVarDump
 			// in case data is RESOURCE
 			case 'RESOURCE'		:
 				$result = 
-					$this->_useHtmlCode(gettype($vardump), "type", $htmlcode, "&nbsp;");
-					$this->_useHtmlCode($vardump, "value resource", $htmlcode, "<br>");
+					$this->_useHtmlCode(gettype($vardump), "resource", $htmlcode) . "(" .
+					$this->_useHtmlCode(intval($vardump).", ".get_resource_type($vardump), "size", $htmlcode) . ")";
+				if ($htmlcode) $result .= "<br>";
 				break;
 				
 			// in case of unknown data type
-			case 'UNKNOWN TYPE'	:
-				$result = "<span class=\"type\">".gettype($vardump)."</span>&nbsp;<span class=\"value unknown\">{$vardump}</span><br>";
-					$this->_useHtmlCode(gettype($vardump), "type", $htmlcode, "&nbsp;");
-					$this->_useHtmlCode($vardump, "value unknown", $htmlcode, "<br>");
+			default	:
+				$result = 
+					$this->_useHtmlCode("resource", "unknown", $htmlcode) . "(" .
+					$this->_useHtmlCode(intval($vardump).", ".get_resource_type($vardump), "size", $htmlcode) . ")";
 				break;
 		}
 		// move result to temporary
@@ -316,10 +310,11 @@ class gsVarDump
 					case 'array':
 					case 'object':
 					case 'limit':
+					case 'resource':
+					case 'unknown':
 						$css .= 'font-weight:bold;';
 						break;
 					case 'null':
-					case 'resource':
 						$css .= 'color:#3465a4;';
 						break;
 					case 'boolean':
@@ -344,7 +339,6 @@ class gsVarDump
 						break;
 					case 'value':
 					case 'arraykey':
-					case 'unknown':
 					case 'separator':
 					default: break;
 				}
