@@ -12,11 +12,11 @@
 	font-size:smaller;
 }
 
-.array, .object, .limit {
+.array, .object, .limit, .resource, .unknown {
 	font-weight:bold;
 }
 
-.null, .resource {
+.null {
 	color:#3465a4;
 }
 
@@ -44,8 +44,6 @@
 }
 
 .arraykey {}
-
-.unknown {}
 
 .separator {}
 
