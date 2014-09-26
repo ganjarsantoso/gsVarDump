@@ -17,9 +17,9 @@ After you initiate the module, you can directly dump a variable. To dump a varia
 gs_vardump($vardump [,$limit [,$use_htmlcode [,$skin]]])
 ```
 
-Note: like php `var_dump()`, if you call `gs_vardump()` function it will directly show the result. You can't store the result to a new variable. If you want to store the result, use OOP-style instead.
-
 In this way, you don't need to create an object, the function will do it for you.
+
+Note: like php `var_dump()`, if you call `gs_vardump()` function it will directly show the result. You can't store the result to a new variable. If you want to store the result, use OOP-style instead.
 
 There are four properties on `gs_vardump()`.
 1. `$vardump` : the variable you want to dump.
@@ -27,7 +27,7 @@ There are four properties on `gs_vardump()`.
 3. `$use_htmlcode` (optional) : use if you want to display the result with html-design, the default is `true`. If you set it to `false`, the return value is just plain variable without html code.
 4. `$skin` (optional) : which refer to css theme to beautify the dump structure to make it nicer look.
 
-**Dump a variable using OOP-style by creating new gsVarDump object.**
+**Call gsVarDump using OOP-style by creating new object**
 
 ```
 $dump = new gsVarDump($skin);
