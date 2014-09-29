@@ -18,7 +18,11 @@ class gsVarDump
 	/**
 	 * @const string WHITE_SPACE : set the global white spaces
 	 */
-	const WHITE_SPACE = '&nbsp;&nbsp;';
+	const WHITE_SPACE = '&nbsp;';
+	/**
+	 * @const string WHITE_SPACE : set the global white spaces
+	 */
+	const NEW_LINE = '<br>';
 	/**
 	 * @const string SEPARATOR : set the global separator
 	 */
@@ -61,6 +65,13 @@ class gsVarDump
 	 */
 	private function _dump($vardump, $limit=0, $htmlcode=true, $level=1, $onlevel=1)
 	{
+		if ($htmlcode) {
+			$white_space = self::WHITE_SPACE;
+			$new_line = self::NEW_LINE;
+		} else {
+			$white_space = ' ';
+			$new_line = PHP_EOL;
+		}
 		// get the temporary dump result
 		$result = $this->dumped;
 		// get data type and make it to UPPERCASE
@@ -72,15 +83,15 @@ class gsVarDump
 				// set bool status
 				if ($vardump) $booltext = 'true'; else $booltext = 'false';
 				$result = 
-					$this->_useHtmlCode(gettype($vardump), "type", $htmlcode, "&nbsp;") . 
-					$this->_useHtmlCode($booltext, "value boolean", $htmlcode, "<br>");
+					$this->_useHtmlCode(gettype($vardump), "type", $htmlcode, $white_space) . 
+					$this->_useHtmlCode($booltext, "value boolean", $htmlcode, $new_line);
 				break;
 				
 			// in case data type is INTEGER
 			case 'INTEGER'		: 
 				$result = 
-					$this->_useHtmlCode("int", "type", $htmlcode, "&nbsp;") . 
-					$this->_useHtmlCode($vardump, "value integer", $htmlcode, "<br>");
+					$this->_useHtmlCode("int", "type", $htmlcode, $white_space) . 
+					$this->_useHtmlCode($vardump, "value integer", $htmlcode, $new_line);
 				break;
 				
 			// in case data type is DOUBLE or FLOAT
@@ -89,16 +100,16 @@ class gsVarDump
 				// in case in the future float and double are different in php
 				if (is_float($vardump)) $dtype = 'float'; else $dtype = gettype($vardump);
 				$result = 
-					$this->_useHtmlCode($dtype, "type", $htmlcode, "&nbsp;") . 
-					$this->_useHtmlCode($vardump, "value double", $htmlcode, "<br>");
+					$this->_useHtmlCode($dtype, "type", $htmlcode, $white_space) . 
+					$this->_useHtmlCode($vardump, "value double", $htmlcode, $new_line);
 				break;
 				
 			// in case data type is STRING
 			case 'STRING'		:
 				$result = 
-					$this->_useHtmlCode(gettype($vardump), "type", $htmlcode, "&nbsp;") . 
-					$this->_useHtmlCode("'{$vardump}'", "value string", $htmlcode, "&nbsp;") .
-					$this->_useHtmlCode("(length=".mb_strlen($vardump).")", "size", $htmlcode, "<br>");
+					$this->_useHtmlCode(gettype($vardump), "type", $htmlcode, $white_space) . 
+					$this->_useHtmlCode("'{$vardump}'", "value string", $htmlcode, $white_space) .
+					$this->_useHtmlCode("(length=".mb_strlen($vardump).")", "size", $htmlcode, $new_line);
 				break;
 				
 			// in case data type is ARRAY
@@ -106,13 +117,13 @@ class gsVarDump
 				// get array size
 				$size = sizeof($vardump);
 				$result = 
-					$this->_useHtmlCode(gettype($vardump), "array", $htmlcode, "&nbsp;") . 
-					$this->_useHtmlCode("(size={$size})", "size", $htmlcode, "<br>");
+					$this->_useHtmlCode(gettype($vardump), "array", $htmlcode, $white_space) . 
+					$this->_useHtmlCode("(size={$size})", "size", $htmlcode, $new_line);
 					
 				// if array is empty
 				if ($size===0) {
-					if ($htmlcode) $result .= str_repeat(self::WHITE_SPACE, $level);
-					$result .= $this->_useHtmlCode("empty", "empty", $htmlcode, "<br>");
+					if ($htmlcode) $result .= str_repeat($white_space, $level*2);
+					$result .= $this->_useHtmlCode("empty", "empty", $htmlcode, $new_line);
 				}
 				
 				// loop all the array datas
@@ -120,32 +131,32 @@ class gsVarDump
 					// in case the array key is integer, omit the quote
 					if (is_int($key)) $keyx = $key; else $keyx = "'{$key}'";
 					// create white space to make nice look
-					if ($htmlcode) $result .= str_repeat(self::WHITE_SPACE, $level);
+					if ($htmlcode) $result .= str_repeat($white_space, $level*2);
 					// if limit exceeded
 					if ($limit>0) {
 						if ($onlevel>$limit) {
 							// write limit symbol
-							if ($htmlcode) $result .= self::LIMIT.'<br>';
+							$result .= self::LIMIT.$new_line;
 							break;
 						}
 					}
 					
 					// set the result
 					$result .= 
-						$this->_useHtmlCode($keyx, "value arraykey", $htmlcode, "&nbsp;") . 
+						$this->_useHtmlCode($keyx, "value arraykey", $htmlcode, $white_space) . 
 						$this->_useHtmlCode(self::SEPARATOR, "separator", $htmlcode);
 						
 					// create white space to make nice look
 					if (strtoupper(gettype($val))=='ARRAY' || strtoupper(gettype($val))=='OBJECT') {
 						if ($htmlcode) {
-							if ($htmlcode) $result .= '<br>';
-							if ($htmlcode) $result .= str_repeat(self::WHITE_SPACE, ++$level);
+							$result .= $new_line;
+							if ($htmlcode) $result .= str_repeat($white_space, ++$level*2);
 						}
 						// loop the function for multilevel array
 						$result .= $this->_dump($val, $limit, $htmlcode, ++$level, ++$onlevel);
 						$level--;
 					} else {
-						if ($htmlcode) $result .= '&nbsp;';
+						$result .= $white_space;
 						// loop the function for multilevel array
 						$result .= $this->_dump($val, $limit, $htmlcode, ++$level, ++$onlevel);
 					}
@@ -158,8 +169,8 @@ class gsVarDump
 					if (is_int($key)) $keyx = $key; else $keyx = "'{$key}'";
 					if ($htmlcode) $result .= str_repeat(WHITE_SPACE, $level);
 					$result .= 
-						$this->_useHtmlCode($keyx, "value arraykey", $htmlcode, "&nbsp;") . 
-						$this->_useHtmlCode(self::SEPARATOR, "separator", $htmlcode, "&nbsp;");
+						$this->_useHtmlCode($keyx, "value arraykey", $htmlcode, $white_space) . 
+						$this->_useHtmlCode(self::SEPARATOR, "separator", $htmlcode, $white_space);
 					$result .= $this->_dump($val, $limit, $htmlcode, ++$level, ++$onlevel);
 					$level--;
 				}
@@ -174,7 +185,7 @@ class gsVarDump
 					$this->_useHtmlCode(gettype($vardump), "object", $htmlcode) . "(" .
 					$this->_useHtmlCode(get_class($vardump), "objname", $htmlcode) . ")[" .
 					$this->_useHtmlCode($sizeobj, "size class", $htmlcode) . "]";
-				if ($htmlcode) $result .= "<br>";				
+				$result .= $new_line;				
 
 				// get class name
 				$classname = get_class($vardump);
@@ -197,30 +208,30 @@ class gsVarDump
 					// in case object name is integer, omit the quotes
 					if (!is_int($objname)) $objname = "'{$objname}'";
 					// create white space to make nice look
-					if ($htmlcode) $result .= str_repeat(self::WHITE_SPACE, $level);
+					if ($htmlcode) $result .= str_repeat($white_space, $level*2);
 					// if limit exceeded
 					if ($limit>0) {
 						if ($onlevel>$limit) {
-							if ($htmlcode) $result .= self::LIMIT.'<br>';
+							$result .= self::LIMIT.$new_line;
 							break;
 						}
 					}
 					
 					// set the result
 					$result .= 
-						$this->_useHtmlCode($visibility, "visibility", $htmlcode, "&nbsp;") . 
-						$this->_useHtmlCode($objname, "value arraykey", $htmlcode, "&nbsp;") . 
+						$this->_useHtmlCode($visibility, "visibility", $htmlcode, $white_space) . 
+						$this->_useHtmlCode($objname, "value arraykey", $htmlcode, $white_space) . 
 						$this->_useHtmlCode(self::SEPARATOR, "separator", $htmlcode);
 						
 					// create white space to make nice look
 					if (strtoupper(gettype($val))=='ARRAY' || strtoupper(gettype($val))=='OBJECT') {
-						if ($htmlcode) $result .= '<br>';
-						if ($htmlcode) $result .= str_repeat(self::WHITE_SPACE, ++$level);
+						$result .= $new_line;
+						if ($htmlcode) $result .= str_repeat($white_space, ++$level*2);
 						// loop the function for multilevel object
 						$result .= $this->_dump($val, $limit, $htmlcode, ++$level, ++$onlevel);
 						$level--;
 					} else {
-						if ($htmlcode) $result .= '&nbsp;';
+						$result .= $white_space;
 						// loop the function for multilevel object
 						$result .= $this->_dump($val, $limit, $htmlcode, ++$level, ++$onlevel);
 					}
@@ -232,7 +243,7 @@ class gsVarDump
 			// in case data is NULL
 			case 'NULL'			:
 				$result = 
-					$this->_useHtmlCode(strtolower(gettype($vardump)), "null", $htmlcode, "<br>");
+					$this->_useHtmlCode(strtolower(gettype($vardump)), "null", $htmlcode, $new_line);
 				break;
 				
 			// in case data is RESOURCE
@@ -240,7 +251,7 @@ class gsVarDump
 				$result = 
 					$this->_useHtmlCode(gettype($vardump), "resource", $htmlcode) . "(" .
 					$this->_useHtmlCode(intval($vardump).", ".get_resource_type($vardump), "size", $htmlcode) . ")";
-				if ($htmlcode) $result .= "<br>";
+				if ($htmlcode) $result .= $new_line;
 				break;
 				
 			// in case of unknown data type
@@ -265,7 +276,7 @@ class gsVarDump
 			if (!empty($css_class)) $css_class = $this->cssStyle($css_class, self::IN_LINE_CSS_STYLE);
 			$result = "<".$tags." ".$css_class.">".$display_item."</".$tags.">".$html_add;
 		} else {
-			$result = $display_item;
+			$result = $display_item.$html_add;
 		}
 		return $result;
 	}
