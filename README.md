@@ -30,7 +30,7 @@ There are four properties on `vardump()`.
 **Call gsVarDump using OOP-style by creating new object**
 
 ```
-$dump = new gsVarDump($skin);
+$dump = new gsVarDump([$skin]);
 
 $string = $dump->vardump($vardump [,$limit [,$use_htmlcode]]);
 echo $string;
