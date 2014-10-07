@@ -29,7 +29,11 @@ $array = array(
 		);
 
 
-echo $dump->vardump($array,0);
+echo '<h3>Example of array</h3>';
+print_r($array);
+
+echo '<h3>Result using gsVarDump</h3>';
+echo $dump->vardump($array);
 
 // or you can directly call vardump() function
 // vardump($array);
