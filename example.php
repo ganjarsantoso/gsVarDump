@@ -31,5 +31,8 @@ $array = array(
 
 echo $dump->vardump($array,0);
 
+// or you can directly call vardump() function
+// vardump($array);
+
 
 fclose($g); 
