@@ -363,7 +363,7 @@ class gsVarDump
 }
 
 // Direct function call to gsVarDump
-function gs_vardump($vardump, $limit=0, $use_htmlcode=true, $skin=false)
+function vardump($vardump, $limit=0, $use_htmlcode=true, $skin=false)
 {
 	$dump = new gsVarDump($skin);
 	echo $dump->vardump($vardump, $limit, $use_htmlcode);
