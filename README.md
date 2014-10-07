@@ -11,17 +11,17 @@ require_once('gs.vardump.php');
 
 After you initiate the module, you can directly dump a variable. To dump a variable, there are two ways to do it. First, call it directly using function and second is using OOP-style.
 
-**Call gsVarDump directly with `gs_vardump()`**
+**Call gsVarDump directly with `vardump()`**
 
 ```
-gs_vardump($vardump [,$limit [,$use_htmlcode [,$skin]]])
+vardump($vardump [,$limit [,$use_htmlcode [,$skin]]])
 ```
 
 In this way, you don't need to create an object, the function will do it for you.
 
-Note: like php `var_dump()`, if you call `gs_vardump()` function it will directly show the result. You can't store the result to a new variable. If you want to store the result, use OOP-style instead.
+Note: like php `var_dump()`, if you call `vardump()` function it will directly show the result. You can't store the result to a new variable. If you want to store the result, use OOP-style instead.
 
-There are four properties on `gs_vardump()`.
+There are four properties on `vardump()`.
 1. `$vardump` : the variable you want to dump.
 2. `$limit` (optional) : how much levels deep you want to display, default is 0 which mean unlimited.
 3. `$use_htmlcode` (optional) : use if you want to display the result with html-design, the default is `true`. If you set it to `false`, the return value is just plain variable without html code.
@@ -36,7 +36,7 @@ $string = $dump->vardump($vardump [,$limit [,$use_htmlcode]]);
 echo $string;
 ```
 
-Unlike directly calling `gs_vardump()` function, this way you can store the result to a variable because the return of `$dump->vardump()` is a string (html code included). To omit the html code of returned value, set the `$use_htmlcode` value to `false`. The properties are the same as `gs_vardump()` except for the `$skin` theme, this way you define a skin theme in different method.
+Unlike directly calling `vardump()` function, this way you can store the result to a variable because the return of `$dump->vardump()` is a string (html code included). To omit the html code of returned value, set the `$use_htmlcode` value to `false`. The properties are the same as `vardump()` except for the `$skin` theme, this way you define a skin theme in different method.
 
 
 **Set themes on gsVarDump**
