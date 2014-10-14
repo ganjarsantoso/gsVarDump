@@ -108,7 +108,7 @@ class gsVarDump
 			case 'STRING'		:
 				$result = 
 					$this->_useHtmlCode(gettype($vardump), "type", $htmlcode, $white_space) . 
-					$this->_useHtmlCode("'{$vardump}'", "value string", $htmlcode, $white_space) .
+					$this->_useHtmlCode("'".htmlspecialchars($vardump)."'", "value string", $htmlcode, $white_space) .
 					$this->_useHtmlCode("(length=".mb_strlen($vardump).")", "size", $htmlcode, $new_line);
 				break;
 				
